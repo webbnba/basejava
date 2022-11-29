@@ -6,10 +6,10 @@ public class ArrayStorage {
     private int size;
 
     void clear() {
-        for (int i = 0; i <= size; i++) {
+        for (int i = 0; i < size; i++) {
             storage[i] = null;
-            size--;
         }
+        size = 0;
     }
 
     void save(Resume r) {
@@ -30,9 +30,9 @@ public class ArrayStorage {
     void delete(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].toString().equals(uuid)) {
-                for (int j = i; j < size - 1; j++) {
-                    storage[j] = storage[j + 1];
-                }
+                Resume temp = storage[i];
+                storage[i] = storage[i + 1];
+                storage[i + 1] = temp;
             }
         }
         size--;
