@@ -6,11 +6,10 @@ public class ArrayStorage {
     private int size;
 
     void clear() {
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i <= size; i++) {
             storage[i] = null;
             size--;
         }
-        size--;
     }
 
     void save(Resume r) {
