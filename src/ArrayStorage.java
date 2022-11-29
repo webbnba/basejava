@@ -3,61 +3,51 @@
  */
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
-    private int size = 0;
+    private int size;
 
     void clear() {
-        for(int i = 0; i <= size; i++) {
-                storage[i] = null;
-                size--;
+        for (int i = 0; i < size; i++) {
+            storage[i] = null;
+            size--;
         }
+        size--;
     }
 
     void save(Resume r) {
         storage[size] = r;
         size++;
-        if(size == storage.length) {
-            Resume[] newArray = new Resume[storage.length * 2];
-            for(int i = 0; i < newArray.length; i++) {
-                newArray[i] = storage[i];
-            }
-            storage = newArray;
-        }
 
     }
 
     Resume get(String uuid) {
-        Resume resume = null;
         for (int i = 0; i < size; i++) {
             if (storage[i].toString().equals(uuid)) {
-                resume = storage[i];
+                return storage[i];
             }
         }
-        return resume;
+        return null;
     }
 
     void delete(String uuid) {
-        for(int i = 0; i < size; i++) {
-            if(storage[i].toString().equals(uuid)) {
-               for(int k = i; k < size - 1; k++) {
-                   storage[k] = storage[k + 1];
-               }
-               size--;
+        for (int i = 0; i < size; i++) {
+            if (storage[i].toString().equals(uuid)) {
+                for (int j = i; j < size - 1; j++) {
+                    storage[j] = storage[j + 1];
+                }
             }
         }
+        size--;
     }
 
     /**
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        Resume[] newArray = new Resume[size];
-        for(int i = 0; i < size; i++) {
-            if(storage[i] != null) {
-                newArray[i] = storage[i];
-            }
+        Resume[] resumes = new Resume[size];
+        for (int i = 0; i < size; i++) {
+            resumes[i] = storage[i];
         }
-
-        return newArray;
+        return resumes;
     }
 
     int size() {
