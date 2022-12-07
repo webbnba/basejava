@@ -19,7 +19,7 @@ public class ArrayStorage {
 
     public void update(Resume r) {
         if (getIndex(r.getUuid()) != -1) {
-            r.setUuid("uuidUpdate");
+            storage[getIndex(r.getUuid())] = r;
         } else {
             System.out.println("ERROR: " + r + " not found");
         }
@@ -27,15 +27,13 @@ public class ArrayStorage {
 
 
     public void save(Resume r) {
-        if (getIndex(r.getUuid()) == -1) {
-            if (STORAGE_LIMIT > size) {
-                storage[size] = r;
-                size++;
-            } else {
-                System.out.println("Storage size is fool");
-            }
-        } else {
+        if (getIndex(r.getUuid()) != -1) {
             System.out.println("ERROR: " + r + " is present");
+        } else if (size >= STORAGE_LIMIT) {
+            System.out.println("Storage size is fool");
+        } else {
+            storage[size] = r;
+            size++;
         }
     }
 
@@ -44,8 +42,8 @@ public class ArrayStorage {
             return storage[getIndex(uuid)];
         } else {
             System.out.println("ERROR: Resume " + uuid + " not found");
+            return null;
         }
-        return null;
     }
 
     public void delete(String uuid) {
