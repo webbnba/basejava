@@ -50,16 +50,6 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
 
-    public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index >= 0) {
-            return storage[index];
-        } else {
-            System.out.println("ERROR: Resume " + uuid + " not found");
-            return null;
-        }
-    }
-
     protected int getIndex(String uuid) {
         Resume searchKey = new Resume();
         searchKey.setUuid(uuid);
