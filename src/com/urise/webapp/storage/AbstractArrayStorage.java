@@ -1,5 +1,8 @@
 package com.urise.webapp.storage;
 
+import com.urise.webapp.exception.ExistStorageException;
+import com.urise.webapp.exception.NotExistStorageException;
+import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
@@ -29,9 +32,9 @@ public abstract class AbstractArrayStorage implements Storage {
     public final void save(Resume r) {
         int index = getIndex(r.getUuid());
         if (index >= 0) {
-            System.out.println("ERROR: " + r + " is present");
+            throw new ExistStorageException(r.getUuid());
         } else if (size >= STORAGE_LIMIT) {
-            System.out.println("Storage size is fool");
+            throw new StorageException("Storage size is fool ", r.getUuid());
         } else {
             saveResume(r, index);
             size++;
@@ -42,9 +45,9 @@ public abstract class AbstractArrayStorage implements Storage {
     public final void delete(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
-            System.out.println("ERROR: This resume " + uuid + " not found");
+            throw new NotExistStorageException(uuid);
         } else {
-            deleteResume(uuid, index);
+            deleteResume(index);
             size--;
         }
     }
@@ -54,14 +57,13 @@ public abstract class AbstractArrayStorage implements Storage {
         if (index >= 0) {
             storage[index] = r;
         } else {
-            System.out.println("ERROR: " + r + " not found");
+            throw new NotExistStorageException(r.getUuid());
         }
     }
 
     public final Resume get(String uuid) {
         if (getIndex(uuid) < 0) {
-            System.out.println("ERROR: Resume " + uuid + " not found");
-            return null;
+            throw new NotExistStorageException(uuid);
         } else {
             return storage[getIndex(uuid)];
         }
@@ -73,6 +75,6 @@ public abstract class AbstractArrayStorage implements Storage {
     protected abstract void saveResume(Resume r, int index);
 
 
-    protected abstract void deleteResume(String uuid, int index);
+    protected abstract void deleteResume(int index);
 
 }
