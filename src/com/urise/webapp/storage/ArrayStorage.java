@@ -10,7 +10,7 @@ import com.urise.webapp.model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    protected void saveResume(Resume r, int index) {
+    protected void doSave(Resume r, Object searchKey) {
         if (size >= STORAGE_LIMIT) {
             throw new StorageException("Storage size is fool ", r.getUuid());
         }
@@ -19,24 +19,24 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void deleteResume(int index) {
-        storage[index] = storage[size - 1];
+    protected void doDelete(Object searchKey) {
+        storage[(int) searchKey] = storage[size - 1];
         storage[size - 1] = null;
         size--;
     }
 
     @Override
-    protected void updateResume(Resume r, int index) {
-        storage[index] = r;
+    protected void doUpdate(Resume r, Object searchKey) {
+        storage[(int) searchKey] = r;
     }
 
     @Override
-    protected Resume getResume(String uuid) {
-        return storage[getIndex(uuid)];
+    protected Resume doGet(String uuid) {
+        return storage[(int) getSearchKey(uuid)];
     }
 
     @Override
-    protected int getIndex(String uuid) {
+    protected Object getSearchKey(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].toString().equals(uuid)) {
                 return i;

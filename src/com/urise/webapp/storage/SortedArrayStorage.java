@@ -10,7 +10,8 @@ import java.util.Arrays;
  */
 public class SortedArrayStorage extends AbstractArrayStorage {
     @Override
-    protected void saveResume(Resume r, int index) {
+    protected void doSave(Resume r, Object searchKey) {
+        int index = (int) searchKey;
         if (size >= STORAGE_LIMIT) {
             throw new StorageException("Storage size is fool ", r.getUuid());
         }
@@ -23,22 +24,23 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void deleteResume(int index) {
+    protected void doDelete(Object searchKey) {
+        int index = (int) searchKey;
         System.arraycopy(storage, index + 1, storage, index, size - 1);
         size--;
     }
 
     @Override
-    protected void updateResume(Resume r, int index) {
-        storage[index] = r;
+    protected void doUpdate(Resume r, Object searchKey) {
+        storage[(int) searchKey] = r;
     }
 
     @Override
-    protected Resume getResume(String uuid) {
-        return storage[getIndex(uuid)];
+    protected Resume doGet(String uuid) {
+        return storage[(int) getSearchKey(uuid)];
     }
 
-    protected int getIndex(String uuid) {
+    protected Object getSearchKey(String uuid) {
         Resume searchKey = new Resume(uuid);
         return Arrays.binarySearch(storage, 0, size, searchKey);
     }
