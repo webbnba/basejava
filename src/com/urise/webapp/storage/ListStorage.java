@@ -20,14 +20,13 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume doGet(String uuid) {
-        int index = resumeList.indexOf(new Resume(uuid));
-        return resumeList.get(index);
+    protected Resume doGet(Object searchKey) {
+        return resumeList.get((int) searchKey);
     }
 
     @Override
     protected boolean isExist(Object searchKey) {
-        return (Integer) searchKey >= 0;
+        return searchKey != null;
     }
 
     @Override
@@ -48,7 +47,12 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected Object getSearchKey(String uuid) {
-        return resumeList.indexOf(new Resume(uuid));
+        for(int i = 0; i < resumeList.size(); i++) {
+            if(resumeList.get(i).getUuid().equals(uuid)) {
+                return i;
+            }
+        }
+        return null;
     }
 
     @Override
