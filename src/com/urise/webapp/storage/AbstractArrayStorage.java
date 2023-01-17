@@ -17,10 +17,10 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return size;
     }
 
-    public List<Resume> getAllSorted() {
+    @Override
+    protected List<Resume> doCopyAll() {
         return Arrays.asList(Arrays.copyOfRange(storage, 0, size));
     }
-
 
     public void clear() {
         Arrays.fill(storage, 0, size, null);

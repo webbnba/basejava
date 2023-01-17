@@ -3,9 +3,7 @@ package com.urise.webapp.storage;
 import com.urise.webapp.model.Resume;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ListStorage extends AbstractStorage {
 
@@ -14,11 +12,6 @@ public class ListStorage extends AbstractStorage {
     @Override
     public void clear() {
         resumeList.clear();
-    }
-
-    @Override
-    public List<Resume> getAllSorted() {
-        return resumeList.stream().sorted(Comparator.comparing(Resume::getFullName)).collect(Collectors.toList());
     }
 
     @Override
@@ -34,6 +27,11 @@ public class ListStorage extends AbstractStorage {
     @Override
     protected boolean isExist(Object searchKey) {
         return searchKey != null;
+    }
+
+    @Override
+    protected List<Resume> doCopyAll() {
+        return resumeList;
     }
 
     @Override

@@ -2,11 +2,10 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
 
-import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class MapResumeStorage extends AbstractStorage {
 
@@ -43,16 +42,13 @@ public class MapResumeStorage extends AbstractStorage {
     }
 
     @Override
-    public void clear() {
-       mapResumeStorage.clear();
+    protected List<Resume> doCopyAll() {
+        return new ArrayList<>(mapResumeStorage.values());
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        return mapResumeStorage.entrySet().stream()
-                .sorted(Comparator.comparing(o -> o.getValue().getUuid()))
-                .map(Map.Entry::getValue)
-                .collect(Collectors.toList());
+    public void clear() {
+       mapResumeStorage.clear();
     }
 
     @Override

@@ -2,15 +2,14 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
 
-import java.util.Comparator;
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class MapUuidStorage extends AbstractStorage {
 
-    private static final Map<String, Resume> resumeMap = new LinkedHashMap<>();
+    private static final Map<String, Resume> resumeMap = new HashMap<>();
 
     @Override
     protected Object getSearchKey(String uuid) {
@@ -44,16 +43,14 @@ public class MapUuidStorage extends AbstractStorage {
     }
 
     @Override
-    public void clear() {
-        resumeMap.clear();
+    protected List<Resume> doCopyAll() {
+        return new ArrayList<>(resumeMap.values());
+
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        return resumeMap.entrySet().stream()
-                .sorted(Comparator.comparing(o -> o.getValue().getUuid()))
-                .map(Map.Entry::getValue)
-                .collect(Collectors.toList());
+    public void clear() {
+        resumeMap.clear();
     }
 
     @Override
