@@ -15,7 +15,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
 
     @Override
-    protected void doSave(Resume r, Object searchKey) {
+    protected void doSave(Resume r, Integer searchKey) {
         int index = (int) searchKey;
         if (size >= STORAGE_LIMIT) {
             throw new StorageException("Storage size is fool ", r.getUuid());
@@ -29,23 +29,23 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void doDelete(Object searchKey) {
+    protected void doDelete(Integer searchKey) {
         int index = (int) searchKey;
         System.arraycopy(storage, index + 1, storage, index, size - 1);
         size--;
     }
 
     @Override
-    protected void doUpdate(Resume r, Object searchKey) {
-        storage[(int) searchKey] = r;
+    protected void doUpdate(Resume r, Integer searchKey) {
+        storage[searchKey] = r;
     }
 
     @Override
-    protected Resume doGet(Object searchKey) {
-        return storage[(int) searchKey];
+    protected Resume doGet(Integer searchKey) {
+        return storage[searchKey];
     }
 
-    protected Object getSearchKey(String uuid) {
+    protected Integer getSearchKey(String uuid) {
         Resume searchKey = new Resume(uuid, "fullName");
         return Arrays.binarySearch(storage, 0, size, searchKey, RESUME_COMPARATOR);
     }

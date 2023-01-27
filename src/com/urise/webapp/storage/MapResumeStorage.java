@@ -7,37 +7,37 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MapResumeStorage extends AbstractStorage {
+public class MapResumeStorage extends AbstractStorage<Resume> {
 
     private static final Map<String, Resume> mapResumeStorage = new LinkedHashMap<>();
 
     @Override
-    protected Object getSearchKey(String uuid) {
+    protected Resume getSearchKey(String uuid) {
         return mapResumeStorage.get(uuid);
     }
 
     @Override
-    protected void doSave(Resume r, Object resume) {
-       mapResumeStorage.put(r.getUuid(), r);
+    protected void doSave(Resume r, Resume resume) {
+        mapResumeStorage.put(r.getUuid(), r);
     }
 
     @Override
-    protected void doDelete(Object resume) {
-        mapResumeStorage.remove(((Resume) resume).getUuid());
+    protected void doDelete(Resume resume) {
+        mapResumeStorage.remove(resume.getUuid());
     }
 
     @Override
-    protected void doUpdate(Resume r, Object resume) {
-       mapResumeStorage.put(r.getUuid(), r);
+    protected void doUpdate(Resume r, Resume resume) {
+        mapResumeStorage.put(r.getUuid(), r);
     }
 
     @Override
-    protected Resume doGet(Object resume) {
-        return mapResumeStorage.get(((Resume) resume).getUuid());
+    protected Resume doGet(Resume resume) {
+        return mapResumeStorage.get(resume.getUuid());
     }
 
     @Override
-    protected boolean isExist(Object resume) {
+    protected boolean isExist(Resume resume) {
         return resume != null;
     }
 
@@ -48,7 +48,7 @@ public class MapResumeStorage extends AbstractStorage {
 
     @Override
     public void clear() {
-       mapResumeStorage.clear();
+        mapResumeStorage.clear();
     }
 
     @Override
