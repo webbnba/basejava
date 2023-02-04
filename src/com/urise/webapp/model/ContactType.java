@@ -1,6 +1,6 @@
 package com.urise.webapp.model;
 
-public enum ContactsType {
+public enum ContactType {
     PHONE_NUMBER("Телефон"),
     SKYPE("Скайп"),
     EMAIL("Электронная почта"),
@@ -9,8 +9,12 @@ public enum ContactsType {
     ACCOUNT_STACK_OVERFLOW("Аккаунт StackOverflow"),
     HOME_PAGE("Домашняя страница");
 
-    public String title;
-    ContactsType(String title) {
+    public final String title;
+    ContactType(String title) {
         this.title = title;
+    }
+
+    public String getTitle() {
+        return title;
     }
 }

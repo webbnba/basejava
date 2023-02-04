@@ -9,32 +9,36 @@ public class Resume implements Comparable<Resume> {
 
     private final String uuid;
     private final String fullName;
-    private final Map<ContactsType, String> contacts = new EnumMap<>(ContactsType.class);
+    private final Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
     private final Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
 
-    public Resume (String fullName) {
+    public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
     }
+
     public Resume(String uuid, String fullName) {
         Objects.requireNonNull(uuid, "uuid must not be null");
         Objects.requireNonNull(fullName, "fullName must not be null");
         this.uuid = uuid;
         this.fullName = fullName;
     }
+
     public String getFullName() {
         return fullName;
     }
+
     public String getUuid() {
         return uuid;
     }
 
-    public String getContacts(ContactsType contactsType) {
-        return contacts.get(contactsType);
+    public String getContacts(ContactType contactType) {
+        return contacts.get(contactType);
     }
 
     public AbstractSection getSections(SectionType sectionType) {
         return sections.get(sectionType);
     }
+
 
     @Override
     public boolean equals(Object o) {
