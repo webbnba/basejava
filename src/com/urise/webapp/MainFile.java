@@ -1,7 +1,6 @@
 package com.urise.webapp;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 
 public class MainFile {
@@ -21,11 +20,7 @@ public class MainFile {
             }
         }
 
-        try (FileInputStream fis = new FileInputStream(file)) {
-            System.out.println(fis.read());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
         searchFile(file);
     }
 

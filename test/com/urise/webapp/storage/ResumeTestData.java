@@ -15,6 +15,7 @@ public class ResumeTestData {
         Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
         contacts.put(ContactType.PHONE_NUMBER, "555-55-55");
         contacts.put(ContactType.SKYPE, "skype:grigory.kislin");
+        contacts.put(ContactType.EMAIL, "gkislin@yandex.ru");
         contacts.put(ContactType.ACCOUNT_LINKED_IN, "http://javaops-demo.ru/basejava/resume");
         contacts.put(ContactType.ACCOUNT_GIT_HUB, "https://github.com/gkislin");
         contacts.put(ContactType.ACCOUNT_STACK_OVERFLOW, "https://stackoverflow.com/users/548473");
