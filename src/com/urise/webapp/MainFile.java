@@ -21,7 +21,8 @@ public class MainFile {
         }
 
 
-        searchFile(file);
+        searchFile(dir);
+        showDirectory(1, dir);
     }
 
     public static void searchFile(File dir) {
@@ -30,17 +31,28 @@ public class MainFile {
             if (files != null) {
                 for (File file : files) {
                     if (file.isDirectory()) {
+                        System.out.println("  Directory:" + file.getName());
                         searchFile(file);
-                    }
-                }
-            }
-            if (files != null) {
-                for (File file : files) {
-                    if (file.isFile()) {
-                        System.out.println(file);
+                    } else if (file.isFile()) {
+                        System.out.println("File:" + file.getName());
                     }
                 }
             }
         }
+    }
+
+    public static void showDirectory(int indent, File file) {
+        for (int i = 0; i < indent; i++) {
+            System.out.print('-');
+        }
+            System.out.println(file.getName());
+
+        if(file.isDirectory()) {
+            File[] files = file.listFiles();
+            for (int i = 0; i< files.length; i++) {
+                showDirectory(indent + 4, files[i]);
+            }
+        }
+
     }
 }
