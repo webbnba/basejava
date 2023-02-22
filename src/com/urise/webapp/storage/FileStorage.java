@@ -2,6 +2,7 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
+import com.urise.webapp.storage.stratege.Serializer;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -59,11 +60,10 @@ public class FileStorage extends AbstractStorage<File>{
     protected Resume doGet(File file) {
         Resume resume;
         try {
-            resume = serializer.doRead(new BufferedInputStream(new FileInputStream(file)));
+           return resume = serializer.doRead(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             throw new StorageException("IO error", file.getName(), e);
         }
-        return resume;
     }
 
     @Override
