@@ -9,6 +9,9 @@ public class OrganizationSection extends AbstractSection {
     private String website;
     private List<Period> periods;
 
+    public OrganizationSection() {
+    }
+
     public OrganizationSection(String name, String website, List<Period> periods) {
         Objects.requireNonNull(name, "name must not be null");
         Objects.requireNonNull(periods, "periods must not be null");

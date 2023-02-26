@@ -60,7 +60,7 @@ public class FileStorage extends AbstractStorage<File>{
     protected Resume doGet(File file) {
         Resume resume;
         try {
-           return resume = serializer.doRead(new BufferedInputStream(new FileInputStream(file)));
+           return serializer.doRead(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             throw new StorageException("IO error", file.getName(), e);
         }
@@ -101,5 +101,4 @@ public class FileStorage extends AbstractStorage<File>{
         }
         return files;
     }
-
 }
