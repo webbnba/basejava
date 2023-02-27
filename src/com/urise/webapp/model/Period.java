@@ -1,10 +1,15 @@
 package com.urise.webapp.model;
 
+import com.urise.webapp.util.DateUtil;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.Objects;
+
+import static com.urise.webapp.util.DateUtil.of;
 
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -16,6 +21,13 @@ public class Period implements Serializable {
     private String description;
 
     public Period() {
+    }
+    public Period(int startYear, Month startMonth, String title, String description) {
+        this(of(startYear, startMonth), DateUtil.NOW, title, description);
+    }
+
+    public Period(int startYear, Month startMonth, int endYear, Month endMonth, String title, String description) {
+        this(of(startYear, startMonth), of(endYear, endMonth), title, description);
     }
 
     public Period(LocalDate startDate, LocalDate endDate, String title, String description) {
