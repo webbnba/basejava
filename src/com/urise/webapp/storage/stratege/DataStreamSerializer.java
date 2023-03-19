@@ -22,9 +22,6 @@ public class DataStreamSerializer implements Serializer {
                 dos.writeUTF(entry.getValue());
             });
 
-
-//            Map<SectionType, AbstractSection> sections = r.getSections();
-
             writeCollection(dos, r.getSections().entrySet(), entry -> {
                 SectionType type = entry.getKey();
                 AbstractSection section = entry.getValue();
@@ -47,7 +44,7 @@ public class DataStreamSerializer implements Serializer {
                             writeLocalDate(dos, period.getEndDate());
                             dos.writeUTF(period.getTitle());
                             dos.writeUTF(period.getDescription());
-                        } );
+                        });
                     }
                 }
             });
@@ -60,17 +57,11 @@ public class DataStreamSerializer implements Serializer {
             String uuid = dis.readUTF();
             String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
-            int size = dis.readInt();
-            for (int i = 0; i < size; i++) {
-                resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF());
-            }
-
-            int sectionsSize = dis.readInt();
-            for (int i = 0; i < sectionsSize; i++) {
+            readItems(dis, () -> resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
+            readItems(dis, () -> {
                 SectionType sectionType = SectionType.valueOf(dis.readUTF());
                 resume.addSection(sectionType, readSection(dis, sectionType));
-
-            }
+            });
             return resume;
         }
     }
@@ -92,13 +83,19 @@ public class DataStreamSerializer implements Serializer {
         void write(T t) throws IOException;
     }
 
+    private interface ElementProcessor {
+        void process() throws IOException;
+    }
+
     private void writeLocalDate(DataOutputStream dos, LocalDate ld) throws IOException {
         dos.writeInt(ld.getYear());
         dos.writeInt(ld.getMonth().getValue());
     }
+
     private LocalDate readLocalDate(DataInputStream dis) throws IOException {
         return LocalDate.of(dis.readInt(), dis.readInt(), 1);
     }
+
     private <T> void writeCollection(DataOutputStream dos, Collection<T> collection, ElementWriter<T> writer) throws IOException {
         dos.writeInt(collection.size());
         for (T item : collection) {
@@ -113,5 +110,12 @@ public class DataStreamSerializer implements Serializer {
             list.add(reader.read());
         }
         return list;
+    }
+
+    private void readItems(DataInputStream dis, ElementProcessor processor) throws IOException {
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            processor.process();
+        }
     }
 }
