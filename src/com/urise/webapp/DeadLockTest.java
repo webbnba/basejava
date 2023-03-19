@@ -22,8 +22,17 @@ class Runner {
     private final Account account2 = new Account();
 
     public void firstThread() {
+        lockProcess(account1, account2);
+    }
+
+    private void lockProcess(Account account1, Account account2) {
         Random random = new Random();
         synchronized (account1) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             synchronized (account2) {
                 for (int i = 0; i < 10000; i++) {
                     Account.transfer(account1, account2, random.nextInt(100));
@@ -31,15 +40,9 @@ class Runner {
             }
         }
     }
+
     public void secondThread() {
-        Random random = new Random();
-        synchronized (account2) {
-            synchronized (account1) {
-                for (int i = 0; i < 10000; i++) {
-                    Account.transfer(account2, account1, random.nextInt(100));
-                }
-            }
-        }
+        lockProcess(account2, account1);
 
     }
 
