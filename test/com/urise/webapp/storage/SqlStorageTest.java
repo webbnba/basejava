@@ -5,6 +5,6 @@ import com.urise.webapp.Config;
 public class SqlStorageTest extends AbstractStorageTest {
 
     public SqlStorageTest() {
-        super(Config.get().getSqlStorage());
+        super(new SqlStorage("jdbc:postgresql://localhost:5432/resumes", "postgres", "admin"));
     }
 }

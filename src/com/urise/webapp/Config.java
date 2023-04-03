@@ -2,7 +2,7 @@ package com.urise.webapp;
 
 import com.urise.webapp.storage.SqlStorage;
 import com.urise.webapp.storage.Storage;
-import org.codehaus.plexus.component.annotations.Configuration;
+
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,7 +13,6 @@ import java.util.Properties;
 public class Config {
     private static final File PROPS = new File("config\\resumes.properties");
     private static final Config INSTANCE = new Config();
-
     private final File storageDir;
     private final Storage sqlStorage;
 
@@ -23,9 +22,9 @@ public class Config {
     }
 
     private Config() {
-        try (InputStream inputStream = new FileInputStream(PROPS)) {
+        try (InputStream is = new FileInputStream(PROPS)) {
             Properties props = new Properties();
-            props.load(inputStream);
+            props.load(is);
             storageDir = new File(props.getProperty("storage.dir"));
             sqlStorage = new SqlStorage(props.getProperty("db.url"), props.getProperty("db.user"), props.getProperty("db.password"));
         } catch (IOException e) {
