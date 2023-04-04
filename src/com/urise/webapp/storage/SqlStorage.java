@@ -5,6 +5,7 @@ import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.sql.ConnectionFactory;
+import org.postgresql.util.PSQLException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class SqlStorage implements Storage {
             ps.setString(1, r.getFullName());
             ps.setString(2, r.getUuid());
             int executeUpdate = ps.executeUpdate();
-            if(executeUpdate == 0) {
+            if (executeUpdate == 0) {
                 throw new NotExistStorageException(r.getUuid());
             }
         } catch (SQLException e) {
@@ -48,9 +49,13 @@ public class SqlStorage implements Storage {
              PreparedStatement ps = connection.prepareStatement("INSERT INTO resume VALUES (?, ?)")) {
             ps.setString(1, r.getUuid());
             ps.setString(2, r.getFullName());
-            ps.execute();
+            boolean execute = ps.execute();
         } catch (SQLException e) {
-            throw new ExistStorageException(r.getUuid());
+            if (e instanceof PSQLException) {
+                if (e.getSQLState().equals("23505")) {
+                    throw new ExistStorageException(r.getUuid());
+                } else throw new StorageException(e);
+            }
         }
     }
 
@@ -75,7 +80,7 @@ public class SqlStorage implements Storage {
              PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM resume WHERE uuid = ?")) {
             preparedStatement.setString(1, uuid);
             int executeUpdate = preparedStatement.executeUpdate();
-            if(executeUpdate == 0) {
+            if (executeUpdate == 0) {
                 throw new NotExistStorageException(uuid);
             }
         } catch (SQLException e) {
@@ -90,7 +95,7 @@ public class SqlStorage implements Storage {
             ResultSet resultSet = ps.executeQuery();
             List<Resume> list = new ArrayList<>();
             while (resultSet.next()) {
-                list.add(new Resume(resultSet.getString(1).trim(), resultSet.getString(2)));
+                list.add(new Resume(resultSet.getString(1), resultSet.getString(2)));
             }
             return list;
         } catch (SQLException e) {

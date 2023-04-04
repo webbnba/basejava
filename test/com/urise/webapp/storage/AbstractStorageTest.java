@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,10 +16,10 @@ import static org.junit.jupiter.api.Assertions.*;
 public abstract class AbstractStorageTest {
     protected static final File STORAGE_DIR = Config.get().getStorageDir();
     protected final Storage storage;
-    private static final String UUID_1 = "uuid1";
-    private static final String UUID_2 = "uuid2";
-    private static final String UUID_3 = "uuid3";
-    private static final String UUID_4 = "uuid4";
+    private static final String UUID_1 = String.valueOf(UUID.randomUUID());
+    private static final String UUID_2 = String.valueOf(UUID.randomUUID());;
+    private static final String UUID_3 = String.valueOf(UUID.randomUUID());;
+    private static final String UUID_4 = String.valueOf(UUID.randomUUID());;
 
     private static final Resume RESUME_1 = ResumeTestData.resumeTest(UUID_1, "fullName1");
     private static final Resume RESUME_2 = ResumeTestData.resumeTest(UUID_2, "fullName2");
