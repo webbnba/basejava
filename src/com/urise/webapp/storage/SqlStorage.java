@@ -49,11 +49,11 @@ public class SqlStorage implements Storage {
              PreparedStatement ps = connection.prepareStatement("INSERT INTO resume VALUES (?, ?)")) {
             ps.setString(1, r.getUuid());
             ps.setString(2, r.getFullName());
-            boolean execute = ps.execute();
+            ps.execute();
         } catch (SQLException e) {
             if (e instanceof PSQLException) {
                 if (e.getSQLState().equals("23505")) {
-                    throw new ExistStorageException(r.getUuid());
+                    throw new ExistStorageException(null);
                 } else throw new StorageException(e);
             }
         }
