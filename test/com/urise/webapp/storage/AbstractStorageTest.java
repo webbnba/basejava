@@ -3,6 +3,7 @@ package com.urise.webapp.storage;
 import com.urise.webapp.Config;
 import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
+import com.urise.webapp.model.ContactType;
 import com.urise.webapp.model.Resume;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -89,6 +90,10 @@ public abstract class AbstractStorageTest {
     @Test
     void update() {
         Resume newResume = new Resume(UUID_1, "New Name");
+        newResume.addContact(ContactType.PHONE_NUMBER, "234-567");
+        newResume.addContact(ContactType.SKYPE, "newSkype");
+        newResume.addContact(ContactType.EMAIL, "newEmail@dog.ru");
+        newResume.addContact(ContactType.ACCOUNT_GIT_HUB, "alexGit");
         storage.update(newResume);
         assertEquals(newResume, storage.get(UUID_1));
     }
