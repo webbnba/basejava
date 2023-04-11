@@ -15,6 +15,10 @@ public class ListSection extends AbstractSection{
         this.list = sections;
     }
 
+    public void setList(List<String> list) {
+        this.list = list;
+    }
+
     public List<String> getList() {
         return list;
     }
