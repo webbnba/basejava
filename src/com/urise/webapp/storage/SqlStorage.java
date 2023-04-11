@@ -199,20 +199,13 @@ public class SqlStorage implements Storage {
     private void addSection(ResultSet rs, Resume r) throws SQLException {
         String value = rs.getString("section_value");
         if (value != null) {
-            for (Map.Entry<SectionType, AbstractSection> e : r.getSections().entrySet()) {
-                SectionType section = SectionType.valueOf(rs.getString("section_type"));
-                AbstractSection type = e.getValue();
-                switch (type) {
-                    case ListSection listSection -> {
-                        r.addSection(section, new ListSection(List.of(value)));
-                    }
-                    case TextSection textSection -> {
-                        r.addSection(section, new TextSection(value));
-                    }
-                    default -> throw new IllegalStateException("Unexpected value: " + type);
-                }
+            SectionType section = SectionType.valueOf(rs.getString("section_type"));
+            switch (section) {
+                case OBJECTIVE, PERSONAL -> r.addSection(section, new TextSection(value));
+                case ACHIEVEMENT, QUALIFICATIONS -> r.addSection(section, new ListSection(List.of(value)));
             }
         }
     }
-
 }
+
+
