@@ -5,10 +5,8 @@ import com.urise.webapp.model.*;
 import com.urise.webapp.sql.SqlHelper;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class SqlStorage implements Storage {
     private SqlHelper sqlHelper;
@@ -71,7 +69,7 @@ public class SqlStorage implements Storage {
             try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM contact WHERE resume_uuid = ?")) {
                 ps.setString(1, uuid);
                 ResultSet rs = ps.executeQuery();
-                if (rs.next()) {
+                while (rs.next()) {
                     addContact(rs, r);
                 }
             }
@@ -79,7 +77,7 @@ public class SqlStorage implements Storage {
             try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM section WHERE resume_uuid = ?")) {
                 ps.setString(1, uuid);
                 ResultSet rs = ps.executeQuery();
-                if (rs.next()) {
+                while (rs.next()) {
                     addSection(rs, r);
                 }
             }
@@ -202,7 +200,7 @@ public class SqlStorage implements Storage {
             SectionType section = SectionType.valueOf(rs.getString("section_type"));
             switch (section) {
                 case OBJECTIVE, PERSONAL -> r.addSection(section, new TextSection(value));
-                case ACHIEVEMENT, QUALIFICATIONS -> r.addSection(section, new ListSection(List.of(value)));
+                case ACHIEVEMENT, QUALIFICATIONS -> r.addSection(section, new ListSection(List.of(value.split("\n"))));
             }
         }
     }
