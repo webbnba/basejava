@@ -156,15 +156,14 @@ public class SqlStorage implements Storage {
                 ps.setString(1, r.getUuid());
                 ps.setString(2, e.getKey().name());
                 AbstractSection section = e.getValue();
-                switch (section) {
-                    case ListSection listSection -> {
-                        ps.setString(3, String.join("\n", listSection.getList()));
-                    }
-                    case TextSection textSection -> {
-                        ps.setString(3, textSection.getText());
-                    }
-                    default -> throw new IllegalStateException("Unexpected value: " + section);
+                SectionType sectionType = e.getKey();
+                switch (sectionType) {
+                    case OBJECTIVE, PERSONAL -> ps.setString(3, ((TextSection) section).getText());
+
+                    case ACHIEVEMENT, QUALIFICATIONS -> ps.setString(3, String.join("\n", ((ListSection) section).getList()));
+
                 }
+
                 ps.addBatch();
             }
             ps.executeBatch();

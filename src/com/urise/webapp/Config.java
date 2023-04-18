@@ -16,7 +16,6 @@ public class Config {
     private final File storageDir;
     private final Storage sqlStorage;
 
-
     public static Config get() {
         return INSTANCE;
     }
@@ -31,11 +30,9 @@ public class Config {
             throw new IllegalStateException("Invalid config file " + PROPS.getAbsolutePath());
         }
     }
-
     public File getStorageDir() {
         return storageDir;
     }
-
     public Storage getSqlStorage() {
         return sqlStorage;
     }

@@ -9,6 +9,7 @@ import com.urise.webapp.storage.Storage;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,32 +34,32 @@ public class ResumeServlet extends HttpServlet {
 //        response.getWriter().write(name == null ? "Hello from servlet.." : "Hello " + name + "!");
 //        response.sendRedirect("New.html");
         Writer writer = response.getWriter();
-        writer.write("""
-                <!DOCTYPE html>
-                <html lang="en">
-                <head>
-                    <meta charset="UTF-8">
-                    <title>ResumesTable</title>
-                </head>
-                <body>
-                <table>
-                    <tr>
-                        <td>UUID</td>
-                        <td>Full_name</td>
-                    </tr>
-                """);
+        writer.write("<!DOCTYPE html>\n" +
+                     "<html lang=\"en\">\n" +
+                     "<head>\n" +
+                     "    <meta charset=\"UTF-8\">\n" +
+                     "    <title>ResumesTable</title>\n" +
+                     "</head>\n" +
+                     "<body>\n" +
+                     "<section>\n" +
+                     "<table border=\"3\">\n" +
+                     "<tr>\n" +
+                     "        <td>UUID</td>\n" +
+                     "        <td>Full_name</td>\n" +
+                     "    </tr>\n");
         for (Resume resume : storage.getAllSorted()) {
-            writer.write("<tr>");
-            writer.write("<td>" + resume.getUuid() + "</td>");
-            writer.write("<td>" + resume.getFullName() + "</td>");
-            writer.write("</tr>");
+            writer.write(
+                    "<tr>\n" +
+                    "        <td>" + resume.getUuid() + "</td>\n" +
+                    "        <td>" + resume.getFullName() + "</td>\n" +
+                    "    </tr>\n");
         }
+        writer.write("</section>\n" +
+                      "</table>\n" +
+                      "</body>\n" +
+                      "</html>\n");
+        writer.close();
 
-        writer.write("""
-                </body>
-                </table>
-                </html>
-                """);
     }
 }
 
