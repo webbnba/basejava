@@ -1,15 +1,48 @@
 package com.urise.webapp.model;
 
 public enum ContactType {
-    PHONE_NUMBER("Телефон"),
-    SKYPE("Скайп"),
-    EMAIL("Электронная почта"),
-    ACCOUNT_LINKED_IN("Аккаунт LinkedIn"),
-    ACCOUNT_GIT_HUB("Аккаунт GitHub"),
-    ACCOUNT_STACK_OVERFLOW("Аккаунт StackOverflow"),
-    HOME_PAGE("Домашняя страница");
+    PHONE("Тел."),
+    MOBILE("Мобильный"),
+    HOME_PHONE("Домашний тел."),
+    SKYPE("Skype") {
+        @Override
+        public String toHtml0(String value) {
+            return getTitle() + ": " + toLink("skype:" + value, value);
+        }
+    },
+    MAIL("Почта") {
+        @Override
+        public String toHtml0(String value) {
+            return getTitle() + ": " + toLink("mailto:" + value, value);
+        }
+    },
+    LINKEDIN("Профиль LinkedIn") {
+        @Override
+        public String toHtml0(String value) {
+            return toLink(value);
+        }
+    },
+    GITHUB("Профиль GitHub") {
+        @Override
+        public String toHtml0(String value) {
+            return toLink(value);
+        }
+    },
+    STATCKOVERFLOW("Профиль Stackoverflow") {
+        @Override
+        public String toHtml0(String value) {
+            return toLink(value);
+        }
+    },
+    HOME_PAGE("Домашняя страница") {
+        @Override
+        public String toHtml0(String value) {
+            return toLink(value);
+        }
+    };
 
-    public final String title;
+    private final String title;
+
     ContactType(String title) {
         this.title = title;
     }
@@ -18,10 +51,19 @@ public enum ContactType {
         return title;
     }
 
-    @Override
-    public String toString() {
-        return "ContactType{" +
-                "title='" + title + '\'' +
-                '}';
+    protected String toHtml0(String value) {
+        return title + ": " + value;
+    }
+
+    public String toHtml(String value) {
+        return (value == null) ? "" : toHtml0(value);
+    }
+
+    public String toLink(String href) {
+        return toLink(href, title);
+    }
+
+    public static String toLink(String href, String title) {
+        return "<a href='" + href + "'>" + title + "</a>";
     }
 }

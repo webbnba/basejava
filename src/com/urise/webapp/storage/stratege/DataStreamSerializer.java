@@ -32,18 +32,19 @@ public class DataStreamSerializer implements Serializer {
                         dos.writeUTF(text);
                     }
                     case ACHIEVEMENT, QUALIFICATIONS -> {
-                        writeCollection(dos, ((ListSection) section).getList(), dos::writeUTF);
+                        writeCollection(dos, ((ListSection) section).getItems(), dos::writeUTF);
                     }
                     case EXPERIENCE, EDUCATION -> {
 
-                        dos.writeUTF(((OrganizationSection) section).getName());
-                        dos.writeUTF(((OrganizationSection) section).getWebsite());
-
-                        writeCollection(dos, ((OrganizationSection) section).getPeriods(), period -> {
-                            writeLocalDate(dos, period.getStartDate());
-                            writeLocalDate(dos, period.getEndDate());
-                            dos.writeUTF(period.getTitle());
-                            dos.writeUTF(period.getDescription());
+                        writeCollection(dos, ((OrganizationSection) section).getOrganizations(), org -> {
+                            dos.writeUTF(org.getHomePage().getName());
+                            dos.writeUTF(org.getHomePage().getUrl());
+                            writeCollection(dos, org.getPeriods(), period -> {
+                                writeLocalDate(dos, period.getStartDate());
+                                writeLocalDate(dos, period.getEndDate());
+                                dos.writeUTF(period.getTitle());
+                                dos.writeUTF(period.getDescription());
+                            });
                         });
                     }
                 }
@@ -70,8 +71,13 @@ public class DataStreamSerializer implements Serializer {
         return switch (sectionType) {
             case PERSONAL, OBJECTIVE -> new TextSection(dis.readUTF());
             case ACHIEVEMENT, QUALIFICATIONS -> new ListSection(readList(dis, dis::readUTF));
-            case EXPERIENCE, EDUCATION -> new OrganizationSection(dis.readUTF(), dis.readUTF(), readList(dis
-                    , () -> new Period(readLocalDate(dis), readLocalDate(dis), dis.readUTF(), dis.readUTF())));
+            case EXPERIENCE, EDUCATION -> new OrganizationSection(
+                    readList(dis, () -> new Organization(
+                            new Link(dis.readUTF(), dis.readUTF()),
+                            readList(dis, () -> new Organization.Period(
+                                    readLocalDate(dis), readLocalDate(dis), dis.readUTF(), dis.readUTF()
+                            ))
+                    )));
         };
     }
 

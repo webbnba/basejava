@@ -1,47 +1,30 @@
 package com.urise.webapp.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class OrganizationSection extends AbstractSection {
     private static final long serialVersionUID = 1L;
-    private String name;
-    private String website;
-    private List<Period> periods;
 
-    public OrganizationSection() {
+    private List<Organization> organizations;
+
+    public OrganizationSection() {}
+
+    public OrganizationSection(Organization... organizations) {
+        this(Arrays.asList(organizations));
     }
 
-    public OrganizationSection(String name, String website, List<Period> periods) {
-        Objects.requireNonNull(name, "name must not be null");
-        Objects.requireNonNull(periods, "periods must not be null");
-        this.name = name;
-        this.website = website;
-        this.periods = periods;
+    public OrganizationSection(List<Organization> organizations) {
+        Objects.requireNonNull(organizations, "organizations must not be null");
+        this.organizations = organizations;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getWebsite() {
-        return website;
-    }
-
-    public void setWebsite(String website) {
-        this.website = website;
-    }
-
-    public List<Period> getPeriods() {
-        return periods;
-    }
-
-    public void setPeriods(List<Period> periods) {
-        this.periods = periods;
+    public List<Organization> getOrganizations() {
+        return organizations;
     }
 
     @Override
@@ -51,25 +34,17 @@ public class OrganizationSection extends AbstractSection {
 
         OrganizationSection that = (OrganizationSection) o;
 
-        if (!name.equals(that.name)) return false;
-        if (!Objects.equals(website, that.website)) return false;
-        return periods.equals(that.periods);
+        return organizations.equals(that.organizations);
+
     }
 
     @Override
     public int hashCode() {
-        int result = name.hashCode();
-        result = 31 * result + (website != null ? website.hashCode() : 0);
-        result = 31 * result + periods.hashCode();
-        return result;
+        return organizations.hashCode();
     }
 
     @Override
     public String toString() {
-        return "OrganizationSection{" +
-                "name='" + name + '\'' +
-                ", website='" + website + '\'' +
-                ", periods=" + periods +
-                '}';
+        return organizations.toString();
     }
 }

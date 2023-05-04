@@ -3,17 +3,23 @@ package com.urise.webapp.storage;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.*;
 import com.urise.webapp.sql.SqlHelper;
+import com.urise.webapp.util.JsonParser;
 
 import java.sql.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class SqlStorage implements Storage {
-    private SqlHelper sqlHelper;
+    public final SqlHelper sqlHelper;
 
     public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException(e);
+        }
         sqlHelper = new SqlHelper(() -> DriverManager.getConnection(dbUrl, dbUser, dbPassword));
     }
+
 
     @Override
     public void clear() {
@@ -156,14 +162,7 @@ public class SqlStorage implements Storage {
                 ps.setString(1, r.getUuid());
                 ps.setString(2, e.getKey().name());
                 AbstractSection section = e.getValue();
-                SectionType sectionType = e.getKey();
-                switch (sectionType) {
-                    case OBJECTIVE, PERSONAL -> ps.setString(3, ((TextSection) section).getText());
-
-                    case ACHIEVEMENT, QUALIFICATIONS -> ps.setString(3, String.join("\n", ((ListSection) section).getList()));
-
-                }
-
+                ps.setString(3, JsonParser.write(section, AbstractSection.class));
                 ps.addBatch();
             }
             ps.executeBatch();
@@ -194,13 +193,10 @@ public class SqlStorage implements Storage {
     }
 
     private void addSection(ResultSet rs, Resume r) throws SQLException {
-        String value = rs.getString("section_value");
-        if (value != null) {
-            SectionType section = SectionType.valueOf(rs.getString("section_type"));
-            switch (section) {
-                case OBJECTIVE, PERSONAL -> r.addSection(section, new TextSection(value));
-                case ACHIEVEMENT, QUALIFICATIONS -> r.addSection(section, new ListSection(List.of(value.split("\n"))));
-            }
+        String content = rs.getString("section_value");
+        if (content != null) {
+            SectionType type = SectionType.valueOf(rs.getString("section_type"));
+            r.addSection(type, JsonParser.read(content, AbstractSection.class));
         }
     }
 }
